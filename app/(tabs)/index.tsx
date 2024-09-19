@@ -2,10 +2,11 @@ import {
   StyleSheet,
   View,
   Text,
-  SafeAreaView,
+  
   TextInput,
   FlatList,
   RefreshControl,
+  Dimensions
 } from "react-native";
 import React from "react"
 
@@ -15,16 +16,14 @@ import HomeHeader from "@/components/HomeHeader";
 import SearchIcon from "@/components/Icons/searchIcon";
 // import { View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  Input,
-  Icon,
-  Checkbox,
- 
-} from "native-base";
+
+import { CheckBox } from "@rneui/themed";
 import IconButton from "@/components/IconButton";
 import FilterIcon from "@/components/Icons/Filter";
 import ScanIcon from "@/components/Icons/ScanIcon";
 import Shipment from "@/components/Shipment";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { RenderBottomModal } from "@/components/BottomModals";
 
 const DATA = [
   {
@@ -62,6 +61,7 @@ const DATA = [
   },
 ];
 
+const { height, width } = Dimensions.get("screen");
 
 export default function shipmentScreen() {
     const [refreshing, setRefreshing] = React.useState(false);
@@ -71,6 +71,7 @@ export default function shipmentScreen() {
          setRefreshing(false);
        }, 2000);
      }, []);
+     const [check1, setCheck1] = React.useState(false);
   return (
     <SafeAreaView style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text> */}
@@ -94,7 +95,7 @@ export default function shipmentScreen() {
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
         }}>
         <IconButton
           text="Filter"
@@ -110,14 +111,27 @@ export default function shipmentScreen() {
         />
       </View>
 
-      <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10,}}>
-        <Text style={{fontWeight: "bold", fontSize: 22}}>Shipment</Text>
-        <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-          <Checkbox
-            value="test"
-            accessibilityLabel="This is a dummy checkbox"
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: 10,
+        }}>
+        <Text style={{ fontWeight: "bold", fontSize: 22 }}>Shipment</Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}>
+          <CheckBox
+            title="Mark All"
+            checked={check1}
+            // onPress={() => setCheck1(!check1)}
           />
-          <Text style={{marginLeft: 10,}}>Mark All</Text>
+          {/* <Text style={{ marginLeft: 10 }}>Mark All</Text> */}
         </View>
       </View>
 
@@ -129,6 +143,12 @@ export default function shipmentScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
+
+      {/* <RenderBottomModal
+        children={<View><Text>This is the modal</Text></View>}
+        height={height * 0.3}
+        open={true}
+      /> */}
     </SafeAreaView>
   );
 }
@@ -138,7 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: "white",
-    marginHorizontal: 10,
+    paddingHorizontal: 15,
   },
   title: {
     fontSize: 20,
@@ -148,7 +168,7 @@ const styles = StyleSheet.create({
     height: 44,
     backgroundColor: "#F4F2F8",
     borderRadius: 10,
-    width: 360,
+    width: "100%",
     paddingHorizontal: 10,
     marginVertical: 10,
   },
@@ -163,7 +183,7 @@ const styles = StyleSheet.create({
 
   textInput: {
     fontSize: 14,
-    width: 250,
+    width: "90%",
     overflow: "hidden",
     color: "#A7A3B3"
     

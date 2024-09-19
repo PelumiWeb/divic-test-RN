@@ -1,18 +1,20 @@
-import { Checkbox } from "native-base";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity,  } from "react-native";
 import BoxIcon from "./Icons/BoxIcon";
 import InverseArrow from "./Icons/InverseArrow";
 import ArrowRight from "./Icons/ArrowRight";
+import { CheckBox } from "@rneui/themed";
 
 type ItemProps = { title: string };
 
 const Shipment = ({ title }: ItemProps) => (
+    
+
   <View style={styles.container}>
     <View
       style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-      <Checkbox
-        value="test"
-        accessibilityLabel="This is a dummy checkbox"
+      <CheckBox
+        // title="value"
+        checked={false}
         style={{ marginRight: 5 }}
       />
       <BoxIcon />
@@ -23,9 +25,9 @@ const Shipment = ({ title }: ItemProps) => (
 
       <View
         style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-        <Text style={{ fontSize: 13 }}>Cairo</Text>
+        <Text style={{ fontSize: 13, marginRight: 5 }}>Cairo</Text>
         <ArrowRight />
-        <Text style={{ fontSize: 13 }}>Alexandra</Text>
+        <Text style={{ fontSize: 13, marginLeft: 5 }}>Alexandra</Text>
       </View>
     </View>
     <TouchableOpacity
@@ -47,7 +49,7 @@ export default Shipment;
 
 const styles = StyleSheet.create({
   container: {
-    width: 361,
+    width: "100%",
     // height: "100%",
     backgroundColor: "#F4F2F8",
     display: "flex",
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 10,
     // marginHorizontal: 10,
+    
   },
   text: {
     fontSize: 16,
