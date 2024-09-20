@@ -60,6 +60,8 @@ export default function ModalScreen() {
     } catch (error) {
       console.log(error, "this is an error");
       alert("An error has occurred");
+        navigation.navigate("(tabs)");
+
       setLoading(false);
 
       // setIsLoading(false);

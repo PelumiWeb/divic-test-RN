@@ -195,15 +195,15 @@ export default function shipmentScreen() {
       const itemIdMatch = item.itemId
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-    
+
       const matchesCategory =
         selectedFilterParams.length === 0 ||
         selectedFilterParams
           .map((cat) => cat.toLowerCase())
           .includes(item.status.toLowerCase());
-          // matchesCategory && matchesSearchQuery;
+      // matchesCategory && matchesSearchQuery;
 
-      return matchesCategory && (statusMatch || companyMatch || itemIdMatch)
+      return matchesCategory && (statusMatch || companyMatch || itemIdMatch);
     });
   }, [searchTerm, selectedFilterParams]);
 
@@ -303,11 +303,12 @@ export default function shipmentScreen() {
             checked={check1}
             onPress={() => setCheck1(!check1)}
           />
-          <Text style={{ marginLeft: 10 }}>Mark All</Text>
+          {/* <Text style={{ marginLeft: 10 }}>Mark All</Text> */}
         </View>
       </View>
 
       <FlatList
+        contentContainerStyle={{ paddingBottom: 20 }}
         data={filteredData}
         refreshing={loading}
         renderItem={({ item }) => <Shipment data={item} />}
