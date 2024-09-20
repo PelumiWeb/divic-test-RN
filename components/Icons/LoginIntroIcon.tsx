@@ -5,7 +5,7 @@ function LoginIntro(props:any) {
   return (
     <Svg
       width={209}
-      height={37}
+      height={props.height}
       viewBox="0 0 209 37"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

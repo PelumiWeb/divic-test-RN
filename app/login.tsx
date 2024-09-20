@@ -14,6 +14,7 @@ import ChevronLeft from "@/components/Icons/ChevronLeft";
 import AnimatedInput from "@/components/AnimatedInput";
 import CustomButton from "@/components/CustomButton";
 import { useNavigation } from "expo-router";
+import Animated from "react-native-reanimated";
 
 export default function ModalScreen() {
   const [name, setName] = React.useState("");
@@ -60,7 +61,7 @@ export default function ModalScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={{
           display: "flex",
@@ -112,6 +113,7 @@ export default function ModalScreen() {
         disabled={!isFormValid}
         isFormValid={isFormValid}
         backgroundColor="#2F50C1"
+        bottom={40}
       />
 
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />

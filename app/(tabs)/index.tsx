@@ -196,8 +196,8 @@ export default function shipmentScreen() {
         .includes(searchTerm.toLowerCase());
       const matchesCategory =
         selectedFilterParams.length === 0 ||
-        selectedFilterParams.includes(item.status.toLowerCase());
-      return statusMatch || companyMatch || itemIdMatch || matchesCategory;
+        selectedFilterParams.includes(item.status);
+      return matchesCategory || statusMatch || companyMatch || itemIdMatch;
     });
   }, [searchTerm, selectedFilterParams]);
 
