@@ -1,4 +1,11 @@
-import { Button, Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+} from "react-native";
 import React from "react";
 import LoginIntro from "@/components/Icons/LoginIntroIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -62,10 +69,6 @@ const splash = (props: Props) => {
   };
 
   React.useEffect(() => {
-    // const showAnimation = () => {
-    //   // opacity.value = withSpring(1);
-    // };
-    // showAnimation();
     startAnimationSequence();
   }, []);
 
@@ -78,11 +81,6 @@ const splash = (props: Props) => {
   //   };
   //   showAnimation();
   // }, []);
-
-  const config = {
-    duration: 1000,
-    easing: Easing.bezier(0.5, 0.01, 0, 1),
-  };
 
   return (
     <View style={styles.container}>
@@ -99,7 +97,7 @@ const splash = (props: Props) => {
               onPress={() => navigation.navigate("login")}
               textColor={"#2F50C1"}
               isFormValid={true}
-              bottom={-320}
+              bottom={Platform.OS === "android" ? -300 : -320}
             />
           </Animated.View>
         </View>
@@ -108,8 +106,8 @@ const splash = (props: Props) => {
           autoPlay
           ref={animation}
           style={{
-            width,
-            height,
+            width: 500,
+            height: 1000,
             // backgroundColor: "#fff",
           }}
           loop={false}
@@ -129,6 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: height,
     width,
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,

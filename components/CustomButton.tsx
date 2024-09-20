@@ -40,7 +40,6 @@ const CustomButton = ({
     <TouchableOpacity
       disabled={disabled}
       onPress={!disabled && onPress}
-      // style={[styles.button, { opacity: isFormValid ? 1 : 0.5 }]}
       style={[
         styles.button,
         {
@@ -53,18 +52,7 @@ const CustomButton = ({
     </TouchableOpacity>
   );
 };
-// return (
-//   <TouchableOpacity
-//     disabled={false}
-//     onPress={onPress}
-//     // style={[styles.button, { opacity: isFormValid ? 1 : 0.5 }]}
-//     style={[
-//       styles.button,
-//       { opacity: isFormValid ? 1 : 0.5, backgroundColor: backgroundColor },
-//     ]}>
-//     <Text style={[styles.text, { color: textColor }]}>Login</Text>
-//   </TouchableOpacity>
-// );
+
 
 export default CustomButton;
 
