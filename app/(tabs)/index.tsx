@@ -148,7 +148,7 @@ const { height, width } = Dimensions.get("screen");
 
 const filteredParams = [
   "Received",
-  "PUTAWAY",
+  "Putaway",
   "Delivered",
   "Canceled",
   "Rejected",
