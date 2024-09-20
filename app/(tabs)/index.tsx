@@ -159,13 +159,11 @@ const filteredParams = [
 export default function shipmentScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [name, setName] = React.useState("");
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [selectedFilterParams, setSelectedFilterParams] = React.useState<
     string[]
   >([]);
-
-  console.log(selectedFilterParams, "This is a filter parameter");
+  const [loading, setLoading] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -184,6 +182,7 @@ export default function shipmentScreen() {
   };
 
   const filteredData = React.useMemo(() => {
+    console.log("yooooo");
     return shippingData.filter((item) => {
       const statusMatch = item.status
         .toLowerCase()
@@ -197,53 +196,51 @@ export default function shipmentScreen() {
       const matchesCategory =
         selectedFilterParams.length === 0 ||
         selectedFilterParams.includes(item.status);
-      return matchesCategory || statusMatch || companyMatch || itemIdMatch;
+      return statusMatch || matchesCategory;
     });
   }, [searchTerm, selectedFilterParams]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          `https://shippex-demo.bc.brandimic.com/api/method/login`,
-          {
-            usr: "test@brandimic.com",
-            pwd: "testy123@",
-          }
-        );
-
-        // console.log(response.status);
-
-        if (response.status === 200) {
-          const data = JSON.stringify(response.data);
-          console.log(` You have created: ${data}`);
-          const parsedData = JSON.parse(data);
-          setName(parsedData.full_name);
-          // setIsLoading(false);
-          // setFullName("");
-          // setEmail("");
-        } else {
-          throw new Error("An error has occurred");
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://shippex-demo.bc.brandimic.com/api/method/frappe.client.get_list",
+        {
+          params: {
+            doctype: "AWB Status", // Make sure to provide the correct doctype
+            // Other parameters if needed
+          },
         }
-      } catch (error) {
-        console.log(error, "this is an error");
-        alert("An error has occurred");
-        // setIsLoading(false);
-      }
-    };
+      );
 
+      console.log(response.data.message);
+
+      if (response.status === 200) {
+        setLoading(false);
+
+        const data = JSON.stringify(response.data);
+        console.log(` You have created: ${data}`);
+      } else {
+        setLoading(false);
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      console.log(error, "this is an error");
+      alert("An error has occurred");
+      setLoading(false);
+    }
+  };
+  fetchData();
+
+  React.useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Text style={styles.title}>Tab One</Text> */}
       <HomeHeader />
       <View>
         <Text style={{ fontSize: 14, color: "000000" }}>Hello,</Text>
-        <Text style={{ fontSize: 28, color: "black" }}>
-          {name || "Ibrahim Shaker"}
-        </Text>
+        <Text style={{ fontSize: 28, color: "black" }}>{"Ibrahim Shaker"}</Text>
       </View>
       <View style={styles.searchContainer}>
         <View style={styles.textInputWrapper}>
@@ -297,18 +294,19 @@ export default function shipmentScreen() {
           <CheckBox
             title="Mark All"
             checked={check1}
-            // onPress={() => setCheck1(!check1)}
+            onPress={() => setCheck1(!check1)}
           />
-          {/* <Text style={{ marginLeft: 10 }}>Mark All</Text> */}
+          <Text style={{ marginLeft: 10 }}>Mark All</Text>
         </View>
       </View>
 
       <FlatList
         data={filteredData}
+        refreshing={loading}
         renderItem={({ item }) => <Shipment data={item} />}
         keyExtractor={(item) => item.id}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
         }
       />
 

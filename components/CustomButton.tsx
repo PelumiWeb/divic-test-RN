@@ -5,9 +5,10 @@ import {
   TouchableOpacity,
   View,
   ViewProps,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
-import { backgroundColor } from "@shopify/restyle";
+import { Spinner } from "native-base";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -37,18 +38,18 @@ const CustomButton = ({
 }: Props) => {
   return (
     <TouchableOpacity
-      disabled={false}
-      onPress={onPress}
+      disabled={disabled}
+      onPress={!disabled && onPress}
       // style={[styles.button, { opacity: isFormValid ? 1 : 0.5 }]}
       style={[
         styles.button,
         {
-          opacity: isFormValid ? 1 : 0.5,
           backgroundColor: backgroundColor,
-          bottom: bottom
+          bottom: bottom,
         },
       ]}>
       <Text style={[styles.text, { color: textColor }]}>Login</Text>
+      {/* <Spinner accessibilityLabel="Loading posts" color="white" /> */}
     </TouchableOpacity>
   );
 };

@@ -15,6 +15,7 @@ import AnimatedInput from "@/components/AnimatedInput";
 import CustomButton from "@/components/CustomButton";
 import { useNavigation } from "expo-router";
 import Animated from "react-native-reanimated";
+import axios from "axios";
 
 export default function ModalScreen() {
   const [name, setName] = React.useState("");
@@ -22,8 +23,47 @@ export default function ModalScreen() {
   const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState({ email, name, password });
   const navigation = useNavigation();
+  const [loading, setLoading] = React.useState(false);
 
   const [isFormValid, setIsFormValid] = React.useState(false);
+
+  const LoginUser = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `https://shippex-demo.bc.brandimic.com/api/method/login`,
+        {
+          usr: "test@brandimic.com",
+          pwd: "testy123@",
+        }
+      );
+
+      // console.log(response.status);
+
+      if (response.status === 200) {
+        setLoading(false);
+
+        const data = JSON.stringify(response.data);
+        console.log(` You have created: ${data}`);
+        const parsedData = JSON.parse(data);
+        setName(parsedData.full_name);
+        navigation.navigate("(tabs)");
+
+        // setIsLoading(false);
+        // setFullName("");
+        // setEmail("");
+      } else {
+        throw new Error("An error has occurred");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error, "this is an error");
+      alert("An error has occurred");
+      setLoading(false);
+
+      // setIsLoading(false);
+    }
+  };
 
   React.useEffect(() => {
     // Trigger form validation when name,
@@ -108,11 +148,13 @@ export default function ModalScreen() {
       <Text style={styles.error}>{errors.password}</Text>
 
       <CustomButton
-        onPress={() => navigation.navigate("(tabs)")}
-        textColor={"#ffffff"}
+        onPress={() => {
+          LoginUser();
+        }}
+        textColor={isFormValid ? "#ffffff" : "#A7A3B3"}
         disabled={!isFormValid}
         isFormValid={isFormValid}
-        backgroundColor="#2F50C1"
+        backgroundColor={!isFormValid ? "#EAE7F2" : "#2F50C1"}
         bottom={40}
       />
 

@@ -2,7 +2,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import BoxIcon from "./Icons/BoxIcon";
 import InverseArrow from "./Icons/InverseArrow";
 import ArrowRight from "./Icons/ArrowRight";
-import { CheckBox } from "@rneui/themed";
+import { CheckBoxIcon } from "@rneui/base/dist/CheckBox/components/CheckBoxIcon";
+import { ListItemCheckBox } from "@rneui/base/dist/ListItem/ListItem.CheckBox";
+import { Checkbox } from "native-base";
 
 type ItemProps = {
   companyName: string;
@@ -17,17 +19,43 @@ type ItemProps = {
 //     from: "AL - MARJ",
 //     to: "KIRDASH",
 //     status: "CANCELED",
+// FFF3D5;
+const renderMultipleBackground = (status: string) => {
+  let backgroundColor;
+  if (status === "REJECTED") {
+    return "#D9E6FD";
+  } else if (status === "CANCELED") {
+    return "#F4F2F8";
+  } else if (status === "DELIVERED") {
+    return "#E3FAD6";
+  } else if (status === "ON HOLD") {
+    return "#FFF3D5";
+  } else {
+    return "white";
+  }
+};
+// DB7E21
+
+const renderMultipleColor = (status: string) => {
+  let color;
+  if (status === "REJECTED") {
+    return "#2F50C1";
+  } else if (status === "CANCELED") {
+    return "#58536E";
+  } else if (status === "DELIVERED") {
+    return "#208D28";
+  } else if (status === "ON HOLD") {
+    return "#DB7E21";
+  } else {
+    ("white");
+  }
+};
 
 const Shipment = ({ data }: { data: ItemProps }) => {
   return (
     <View style={styles.container}>
       <View
         style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-        {/* <CheckBox
-          // title="value"
-          checked={false}
-          style={{ marginRight: 5 }}
-        /> */}
         <BoxIcon />
       </View>
       <View>
@@ -63,11 +91,14 @@ const Shipment = ({ data }: { data: ItemProps }) => {
         style={{
           borderWidth: 1,
           borderStyle: "solid",
-          borderColor: "white",
+          borderColor: "#E3FAD6",
           padding: 5,
           borderRadius: 5,
+          backgroundColor: renderMultipleBackground(data.status),
         }}>
-        <Text>{data.status}</Text>
+        <Text style={{ color: renderMultipleColor(data.status) }}>
+          {data.status}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity>
         <InverseArrow />
