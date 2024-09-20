@@ -1,50 +1,80 @@
-import { View, Text, StyleSheet, TouchableOpacity,  } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import BoxIcon from "./Icons/BoxIcon";
 import InverseArrow from "./Icons/InverseArrow";
 import ArrowRight from "./Icons/ArrowRight";
 import { CheckBox } from "@rneui/themed";
 
-type ItemProps = { title: string };
+type ItemProps = {
+  companyName: string;
+  itemId: string;
+  from: string;
+  to: string;
+  status: string;
+};
 
-const Shipment = ({ title }: ItemProps) => (
-    
+//  companyName: "ABC",
+//     itemId: "23422096719",
+//     from: "AL - MARJ",
+//     to: "KIRDASH",
+//     status: "CANCELED",
 
-  <View style={styles.container}>
-    <View
-      style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-      <CheckBox
-        // title="value"
-        checked={false}
-        style={{ marginRight: 5 }}
-      />
-      <BoxIcon />
-    </View>
-    <View>
-      <Text style={{ fontSize: 13 }}>AWB</Text>
-      <Text style={{ fontSize: 18, fontWeight: "bold" }}>41785691423</Text>
-
+const Shipment = ({ data }: { data: ItemProps }) => {
+  return (
+    <View style={styles.container}>
       <View
         style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-        <Text style={{ fontSize: 13, marginRight: 5 }}>Cairo</Text>
-        <ArrowRight />
-        <Text style={{ fontSize: 13, marginLeft: 5 }}>Alexandra</Text>
+        {/* <CheckBox
+          // title="value"
+          checked={false}
+          style={{ marginRight: 5 }}
+        /> */}
+        <BoxIcon />
       </View>
+      <View>
+        <Text style={{ fontSize: 13 }}>{data?.companyName}</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>{data.itemId}</Text>
+
+        <View
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+          }}>
+          <Text
+            style={{
+              fontSize: 13,
+              marginRight: 5,
+              textTransform: "capitalize",
+            }}>
+            {data.from}
+          </Text>
+          <ArrowRight />
+          <Text
+            style={{
+              fontSize: 13,
+              marginLeft: 5,
+              textTransform: "capitalize",
+            }}>
+            {data.to}
+          </Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={{
+          borderWidth: 1,
+          borderStyle: "solid",
+          borderColor: "white",
+          padding: 5,
+          borderRadius: 5,
+        }}>
+        <Text>{data.status}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <InverseArrow />
+      </TouchableOpacity>
     </View>
-    <TouchableOpacity
-      style={{
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderColor: "white",
-        padding: 5,
-        borderRadius: 5,
-      }}>
-      <Text>CANCELED</Text>
-    </TouchableOpacity>
-    <TouchableOpacity>
-      <InverseArrow />
-    </TouchableOpacity>
-  </View>
-);
+  );
+};
 export default Shipment;
 
 const styles = StyleSheet.create({
@@ -60,7 +90,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 10,
     // marginHorizontal: 10,
-    
   },
   text: {
     fontSize: 16,

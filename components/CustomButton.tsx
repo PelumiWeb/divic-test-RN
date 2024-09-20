@@ -20,7 +20,6 @@ const CustomButton = ({
   isFormValid,
 }: Props) => {
 
-  console.log(isFormValid)
   return (
     <TouchableOpacity
       disabled={false}

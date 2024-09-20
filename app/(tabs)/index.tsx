@@ -2,13 +2,12 @@ import {
   StyleSheet,
   View,
   Text,
-  
   TextInput,
   FlatList,
   RefreshControl,
-  Dimensions
+  Dimensions,
 } from "react-native";
-import React from "react"
+import React from "react";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Header } from "react-native/Libraries/NewAppScreen";
@@ -24,6 +23,7 @@ import ScanIcon from "@/components/Icons/ScanIcon";
 import Shipment from "@/components/Shipment";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RenderBottomModal } from "@/components/BottomModals";
+import axios from "axios";
 
 const DATA = [
   {
@@ -61,29 +61,196 @@ const DATA = [
   },
 ];
 
+const shippingData = [
+  {
+    id: "1",
+    companyName: "AWB",
+    itemId: "23485095910",
+    from: "Cairo",
+    to: "Alexandra",
+    status: "CANCELED",
+  },
+  {
+    id: "2",
+    companyName: "AWB",
+    itemId: "23422095910",
+    from: "Cairo",
+    to: "Alexandra",
+    status: "DELIVERED",
+  },
+  {
+    id: "3",
+    companyName: "AWC",
+    itemId: "23422095919",
+    from: "Giza",
+    to: "Nasr",
+    status: "CANCELED",
+  },
+  {
+    id: "4",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MARJ",
+    to: "KIRDASH",
+    status: "REJECTED",
+  },
+  {
+    id: "5",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MAAD",
+    to: "AL Barajil",
+    status: "ON HOLD",
+  },
+  {
+    id: "6",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MARJ",
+    to: "KIRDASH",
+    status: "DELIVERED",
+  },
+  {
+    id: "7",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MARJ",
+    to: "KIRDASH",
+    status: "DELIVERED",
+  },
+  {
+    id: "8",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MAAD",
+    to: "AL Barajil",
+    status: "LOST",
+  },
+  {
+    id: "9",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MAAD",
+    to: "AL Barajil",
+    status: "PENDING",
+  },
+  {
+    id: "10",
+    companyName: "ABC",
+    itemId: "23422096719",
+    from: "AL - MAAD",
+    to: "AL Barajil",
+    status: "PUTAWAY",
+  },
+];
+
 const { height, width } = Dimensions.get("screen");
 
+const filteredParams = [
+  "Received",
+  "Putaway",
+  "Delivered",
+  "Canceled",
+  "Rejected",
+  "Lost",
+  "On Hold",
+];
+
 export default function shipmentScreen() {
-    const [refreshing, setRefreshing] = React.useState(false);
-     const onRefresh = React.useCallback(() => {
-       setRefreshing(true);
-       setTimeout(() => {
-         setRefreshing(false);
-       }, 2000);
-     }, []);
-     const [check1, setCheck1] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [name, setName] = React.useState("");
+  const [searchTerm, setSearchTerm] = React.useState<string>("");
+  const [selectedFilterParams, setSelectedFilterParams] = React.useState<
+    string[]
+  >([]);
+
+  console.log(selectedFilterParams, "This is a filter parameter");
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+  const [check1, setCheck1] = React.useState(false);
+
+  const toggleFilterParams = (category: string) => {
+    setSelectedFilterParams((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((c) => c !== category)
+        : [...prevCategories, category]
+    );
+  };
+
+  const filteredData = React.useMemo(() => {
+    return shippingData.filter((item) => {
+      const statusMatch = item.status
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const companyMatch = item.companyName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const itemIdMatch = item.itemId
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedFilterParams.length === 0 ||
+        selectedFilterParams.includes(item.status.toLowerCase());
+      return statusMatch || companyMatch || itemIdMatch || matchesCategory;
+    });
+  }, [searchTerm, selectedFilterParams]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `https://shippex-demo.bc.brandimic.com/api/method/login`,
+          {
+            usr: "test@brandimic.com",
+            pwd: "testy123@",
+          }
+        );
+
+        // console.log(response.status);
+
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data);
+          console.log(` You have created: ${data}`);
+          const parsedData = JSON.parse(data);
+          setName(parsedData.full_name);
+          // setIsLoading(false);
+          // setFullName("");
+          // setEmail("");
+        } else {
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+        console.log(error, "this is an error");
+        alert("An error has occurred");
+        // setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text> */}
       <HomeHeader />
       <View>
         <Text style={{ fontSize: 14, color: "000000" }}>Hello,</Text>
-        <Text style={{ fontSize: 28, color: "black" }}>Ibrahim Shaker</Text>
+        <Text style={{ fontSize: 28, color: "black" }}>
+          {name || "Ibrahim Shaker"}
+        </Text>
       </View>
       <View style={styles.searchContainer}>
         <View style={styles.textInputWrapper}>
           <SearchIcon />
           <TextInput
+            value={searchTerm}
+            onChangeText={setSearchTerm}
             placeholderTextColor={"#A7A3B3"}
             placeholder="Search"
             style={styles.textInput}
@@ -102,6 +269,7 @@ export default function shipmentScreen() {
           backgroundColor="#F4F2F8"
           textColor="#58536E"
           Icon={() => <FilterIcon />}
+          onPress={() => setOpen(true)}
         />
         <IconButton
           text="Add Scan"
@@ -136,19 +304,22 @@ export default function shipmentScreen() {
       </View>
 
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Shipment title={item.title} />}
+        data={filteredData}
+        renderItem={({ item }) => <Shipment data={item} />}
         keyExtractor={(item) => item.id}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
 
-      {/* <RenderBottomModal
-        children={<View><Text>This is the modal</Text></View>}
-        height={height * 0.3}
-        open={true}
-      /> */}
+      <RenderBottomModal
+        filteredData={filteredParams}
+        height={height * 0.4}
+        open={open}
+        setOpen={setOpen}
+        toggleFilterParams={toggleFilterParams}
+        selectedFilterParams={selectedFilterParams}
+      />
     </SafeAreaView>
   );
 }
@@ -185,8 +356,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: "90%",
     overflow: "hidden",
-    color: "#A7A3B3"
-    
+    color: "#A7A3B3",
+
     // paddingVertical: 6,
     // paddingHorizontal: 12,
   },

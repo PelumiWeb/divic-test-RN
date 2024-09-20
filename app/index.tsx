@@ -19,10 +19,7 @@ const splash = (props: Props) => {
         onPress={() => navigation.navigate("login")}
         textColor={"#2F50C1"}
         isFormValid={true}
-        buttonStyle={{
-          paddingHorizontal: 10,
-          marginBottom: 10,
-        }}
+   
       />
     </SafeAreaView>
   );

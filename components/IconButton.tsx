@@ -6,11 +6,13 @@ type Props = {
   backgroundColor?: string;
   text: string;
   textColor: string;
-  Icon: any};
+  Icon: any
+onPress: () => void;
+};
 
-const IconButton = ({ backgroundColor, text, textColor, Icon }: Props) => {
+const IconButton = ({ backgroundColor, text, textColor, Icon, onPress }: Props) => {
   return (
-    <TouchableOpacity style={[styles.container, { backgroundColor: backgroundColor }]}>
+    <TouchableOpacity style={[styles.container, { backgroundColor: backgroundColor }]}onPress={onPress}>
       <Icon />
       <Text style={[styles.text, {color: textColor}]}>{text}</Text>
     </TouchableOpacity>

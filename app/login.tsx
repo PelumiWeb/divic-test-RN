@@ -85,6 +85,7 @@ export default function ModalScreen() {
           text={name}
           setText={setName}
           keyBoardType="url"
+          url
         />
         <Text style={styles.error}>{errors.name}</Text>
         <AnimatedInput
