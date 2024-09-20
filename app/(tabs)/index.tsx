@@ -148,7 +148,7 @@ const { height, width } = Dimensions.get("screen");
 
 const filteredParams = [
   "Received",
-  "Putaway",
+  "PUTAWAY",
   "Delivered",
   "Canceled",
   "Rejected",
@@ -164,6 +164,8 @@ export default function shipmentScreen() {
     string[]
   >([]);
   const [loading, setLoading] = React.useState(false);
+
+  console.log(selectedFilterParams);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -193,10 +195,15 @@ export default function shipmentScreen() {
       const itemIdMatch = item.itemId
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
+    
       const matchesCategory =
         selectedFilterParams.length === 0 ||
-        selectedFilterParams.includes(item.status);
-      return statusMatch || matchesCategory;
+        selectedFilterParams
+          .map((cat) => cat.toLowerCase())
+          .includes(item.status.toLowerCase());
+          // matchesCategory && matchesSearchQuery;
+
+      return matchesCategory && (statusMatch || companyMatch || itemIdMatch)
     });
   }, [searchTerm, selectedFilterParams]);
 
