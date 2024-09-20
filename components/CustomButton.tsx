@@ -20,6 +20,7 @@ type Props = {
   isFormValid?: boolean;
   top: number;
   bottom: number;
+  loading: boolean;
 };
 
 //   backgroundColor,
@@ -35,6 +36,7 @@ const CustomButton = ({
   disabled,
   isFormValid,
   bottom,
+  loading,
 }: Props) => {
   return (
     <TouchableOpacity
@@ -47,19 +49,22 @@ const CustomButton = ({
           bottom: bottom,
         },
       ]}>
-      <Text style={[styles.text, { color: textColor }]}>Login</Text>
-      {/* <Spinner accessibilityLabel="Loading posts" color="white" /> */}
+      {loading ? (
+        <Spinner accessibilityLabel="Loading posts" color="white" />
+      ) : (
+        <Text style={[styles.text, { color: textColor }]}>Login</Text>
+      )}
     </TouchableOpacity>
   );
 };
-
 
 export default CustomButton;
 
 const styles = StyleSheet.create({
   button: {
     width: "100%",
-    paddingVertical: 20,
+    // paddingVertical: 20,
+    height: 60,
     display: "flex",
     flex: 1,
     flexDirection: "row",

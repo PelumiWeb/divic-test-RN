@@ -53,8 +53,9 @@ export default function ModalScreen() {
         // setFullName("");
         // setEmail("");
       } else {
-        throw new Error("An error has occurred");
         setLoading(false);
+
+        throw new Error("An error has occurred");
       }
     } catch (error) {
       console.log(error, "this is an error");
@@ -101,7 +102,7 @@ export default function ModalScreen() {
   };
 
   return (
-    <SafeAreaView SafeAreaView style={styles.container}>
+    <SafeAreaView  style={styles.container}>
       <TouchableOpacity
         style={{
           display: "flex",
@@ -156,6 +157,7 @@ export default function ModalScreen() {
         isFormValid={isFormValid}
         backgroundColor={!isFormValid ? "#EAE7F2" : "#2F50C1"}
         bottom={40}
+        loading={loading}
       />
 
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
